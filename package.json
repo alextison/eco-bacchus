@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@react-spring/web": "^9.5.5",
+    "@vercel/speed-insights": "^1.0.0",
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18",
