@@ -130,6 +130,7 @@ export default function Home() {
     );
     synth.speak(swipeText);*/
     setLastDirection(direction)
+    
   }
 
   const outOfFrame = (name: string) => {
