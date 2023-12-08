@@ -38,6 +38,12 @@ body>div {
   align-items: center;
 }
 
+#TTS{
+  overflow: hidden;
+  white-space: nowrap;
+  margin: 15px;
+}
+
 .app {
   overflow: hidden;
 }
