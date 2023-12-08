@@ -1,5 +1,5 @@
 'use client';
-import React, { use, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import TinderCard from 'react-tinder-card'
 import Button from './components/button/Button';
 import Swal from 'sweetalert2';
@@ -119,23 +119,34 @@ export default function Home() {
 
   }
 
-  function swiped(direction: string, cardKey: string) {
-    if (direction == "left") {
-      setAnswer("No")
-    } else {
-      setAnswer("Yes")
-    }
+  const swiped = (direction: string, cardKey: string) => {
     /* *let swipeText = new SpeechSynthesisUtterance(
       "You answered "+answer,
     );
     synth.speak(swipeText);*/
-    setLastDirection(direction)
-    
-  }
+    let newAnswer = direction === 'left' ? 'Non' : 'Oui';
+    setAnswer(newAnswer);
+    answer = newAnswer
+    if (answer === characters[questionIndex].response) {
+      showAlert(true);
+    } else {
+      showAlert(false);
+    }
+    setLastDirection(direction);
+    setQuestionIndex((prevIndex) => prevIndex - 1);
+  };
+
+  /*useEffect(() => {
+    if (answer === characters[questionIndex].response) {
+      showAlert(true);
+    } else {
+      showAlert(false);
+    }
+  }, [answer, characters, questionIndex]);*/
 
   const outOfFrame = (name: string) => {
-    console.log(name + ' left the screen!')
-    setQuestionIndex(questionIndex - 1);
+    console.log(name + answer)
+  
   }
 
 return (

@@ -13,7 +13,7 @@ const Button = ({ type, onClickFunction }: { type: string; onClickFunction: () =
     );
     
     return (
-        <button className="roundButton" onClick={onClickFunction}>{icon}</button>
+        <button disabled className="roundButton" onClick={onClickFunction}>{icon}</button>
     );
 };
 
