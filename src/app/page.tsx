@@ -1,8 +1,9 @@
 'use client';
-import React, { use, useState } from 'react'
+import React, { use, useEffect, useState, useRef } from 'react'
 import TinderCard from 'react-tinder-card'
 import Button from './components/button/Button';
 import Swal from 'sweetalert2';
+import ReactDOM from 'react-dom';
 
 
 const db = [
@@ -82,6 +83,13 @@ export default function Home() {
   //Everything commented with * is a TTS line
   //*const synth = window.speechSynthesis;
   const characters = db;
+  const [cardContainer, setCardContainer] = useState<HTMLDivElement | null>(null);
+  const cardContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setCardContainer(cardContainerRef.current);
+  }, []);
+
   const [lastDirection, setLastDirection] = useState<string>();
   let [answer, setAnswer] = useState<string>();
   let [questionIndex, setQuestionIndex] = useState<number>(9);
@@ -110,6 +118,13 @@ export default function Home() {
       // Didn't find a way to retrieve the right TinderCard thanks to it's key
       // await db[questionIndex].question.current.swipe(direction);
       buttonActions(direction);
+      if (cardContainer?.lastChild) {
+        cardContainer.removeChild(cardContainer.lastChild);
+      }
+    }
+    if(questionIndex == 0){
+      document.getElementById("buttonsRow")?.remove();
+
     }
   }
 
@@ -119,22 +134,39 @@ export default function Home() {
 
   }
 
-  function swiped(direction: string, cardKey: string) {
-    if (direction == "left") {
-      setAnswer("No")
-    } else {
-      setAnswer("Yes")
-    }
+  const swiped = (direction: string, cardKey: string) => {
     /* *let swipeText = new SpeechSynthesisUtterance(
       "You answered "+answer,
     );
     synth.speak(swipeText);*/
-    setLastDirection(direction)
-  }
+    let newAnswer = direction === 'left' ? 'Non' : 'Oui';
+    setAnswer(newAnswer);
+    answer = newAnswer
+    if (answer === characters[questionIndex].response) {
+      showAlert(true);
+    } else {
+      showAlert(false);
+    }
+    setLastDirection(direction);
+
+    if(questionIndex == 0){
+      document.getElementById("buttonsRow")?.remove();
+      
+    }
+    setQuestionIndex((prevIndex) => prevIndex - 1);
+  };
+
+  /*useEffect(() => {
+    if (answer === characters[questionIndex].response) {
+      showAlert(true);
+    } else {
+      showAlert(false);
+    }
+  }, [answer, characters, questionIndex]);*/
 
   const outOfFrame = (name: string) => {
-    console.log(name + ' left the screen!')
-    setQuestionIndex(questionIndex - 1);
+    console.log(name + answer)
+  
   }
 
 return (
@@ -142,7 +174,7 @@ return (
   <link href='https://fonts.googleapis.com/css?family=Damion&display=swap' rel='stylesheet' />
   <link href='https://fonts.googleapis.com/css?family=Alatsi&display=swap' rel='stylesheet' />
   <h1>Eco Bacchus</h1>
-  <div className='cardContainer'>
+  <div className='cardContainer' id="cardContainerDiv" ref={cardContainerRef}>
     {characters.map((character) =>
       <TinderCard className='swipe' preventSwipe={['up', 'down']} key={character.question} onSwipe={(dir) => swiped(dir, character.question)} onCardLeftScreen={() => outOfFrame(character.question)}>
         <div style={{ backgroundImage: 'url(' + character.url + ')' }} className='card'>
@@ -161,7 +193,7 @@ return (
       </TinderCard>
     )}
   </div>
-  <div className="buttonsRow">
+  <div className="buttonsRow" id="buttonsRow">
       <Button type="no" onClickFunction={() => swipe("left")} />
       <Button type="yes" onClickFunction={() => swipe("right")} />
     </div>
