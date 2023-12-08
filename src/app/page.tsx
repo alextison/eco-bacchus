@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react'
+import React, { use, useState } from 'react'
 import TinderCard from 'react-tinder-card'
 import Button from './components/button/Button';
 import Swal from 'sweetalert2';
@@ -81,10 +81,10 @@ const db = [
 export default function Home() {
   //Everything commented with * is a TTS line
   //*const synth = window.speechSynthesis;
-  const characters = db
-  const [lastDirection, setLastDirection] = useState<string>()
-  let [answer, setAnswer] = useState<string>()
-
+  const characters = db;
+  const [lastDirection, setLastDirection] = useState<string>();
+  let [answer, setAnswer] = useState<string>();
+  let [questionIndex, setQuestionIndex] = useState<number>(9);
 
   function showAlert(wasRight: boolean) {
     if(wasRight){
@@ -105,18 +105,21 @@ export default function Home() {
     
   }
 
-  function onCardAnswered(direction: string, nameToDelete: string) {
-    swiped(direction, nameToDelete)
-    setTimeout(() => {
-      console.log('Waiting');
-    }, 500);
+  const swipe = async (direction: string) => {
+    if (questionIndex >=0 && questionIndex < db.length) {
+      // Didn't find a way to retrieve the right TinderCard thanks to it's key
+      // await db[questionIndex].question.current.swipe(direction);
+      buttonActions(direction);
+    }
+  }
 
-    () => outOfFrame(nameToDelete)
+  function buttonActions(direction: string) {
+    swiped(direction, characters[questionIndex].question);
+    () => outOfFrame(characters[questionIndex].question);
 
   }
 
-  function swiped(direction: string, nameToDelete: string) {
-
+  function swiped(direction: string, cardKey: string) {
     if (direction == "left") {
       setAnswer("No")
     } else {
@@ -126,15 +129,12 @@ export default function Home() {
       "You answered "+answer,
     );
     synth.speak(swipeText);*/
-
-
     setLastDirection(direction)
   }
 
   const outOfFrame = (name: string) => {
     console.log(name + ' left the screen!')
-
-    
+    setQuestionIndex(questionIndex - 1);
   }
 
 return (
@@ -157,15 +157,14 @@ return (
             </div>
             <h3>{character.question}</h3>
           </div>
-          {/* <div className="buttonsRow">
-              <Button type="no" onClickFunction={(dir: string) => swiped(dir = "left", character.name)} />
-              <Button type="yes" onClickFunction={(dir: string) => swiped(dir = "right", character.name)} />
-            </div> */}
         </div>
       </TinderCard>
     )}
   </div>
-  {lastDirection ? <h2 className='infoText'>You swiped {lastDirection}</h2> : <h2 className='infoText' />}
+  <div className="buttonsRow">
+      <Button type="no" onClickFunction={() => swipe("left")} />
+      <Button type="yes" onClickFunction={() => swipe("right")} />
+    </div>
 </div>
 )
 }
