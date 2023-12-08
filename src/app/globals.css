@@ -24,7 +24,7 @@ body {
   width: 100vw;
   min-height: 100vh;
   overflow: hidden;
-  background: linear-gradient(#e66465, #9198e5);
+  background: linear-gradient(to right, rgb(172, 234, 126), rgb(41, 129, 137));
 }
 
 * {

@@ -1,0 +1,5 @@
+.roundButton {
+    border-radius: 70%;
+    border: 1;
+    cursor: pointer;
+}
