@@ -82,7 +82,6 @@ const db = [
 
 export default function Home() {
   
-  const synth = window.speechSynthesis;
   const characters = db;
   const [cardContainer, setCardContainer] = useState<HTMLDivElement | null>(null);
   const cardContainerRef = useRef<HTMLDivElement | null>(null);
@@ -132,13 +131,13 @@ export default function Home() {
 
   function tts(text: string){
     let checkbox = document.getElementById('toggleTts') as HTMLInputElement
-    
-    if(checkbox.checked){
-      let newUtterance = new SpeechSynthesisUtterance(
-        text
-      );
-      synth.speak(newUtterance)
-    }
+    // We have to remove this TTS part who is working in local but not in production
+    // if(checkbox.checked){
+    //   let newUtterance = new SpeechSynthesisUtterance(
+    //     text
+    //   );
+    //   synth.speak(newUtterance)
+    // }
   }
 
   function buttonActions(direction: string) {
