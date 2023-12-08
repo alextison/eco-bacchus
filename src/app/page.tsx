@@ -58,7 +58,7 @@ return (
   <h1>Eco Bacchus</h1>
   <div className='cardContainer'>
     {characters.map((character) =>
-      <TinderCard className='swipe' key={character.question} onSwipe={(dir) => swiped(dir, character.question)} onCardLeftScreen={() => outOfFrame(character.question)}>
+      <TinderCard className='swipe' preventSwipe={['up', 'down']} key={character.question} onSwipe={(dir) => swiped(dir, character.question)} onCardLeftScreen={() => outOfFrame(character.question)}>
         <div style={{ backgroundImage: 'url(' + character.url + ')' }} className='card'>
           <div className='veil'>
             <div className='answers'>
