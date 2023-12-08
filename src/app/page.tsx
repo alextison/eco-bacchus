@@ -2,6 +2,7 @@
 import React, { use, useEffect, useState, useRef } from 'react'
 import TinderCard from 'react-tinder-card'
 import Button from './components/button/Button';
+import Checkbox from './components/checkbox/checkbox';
 import Swal from 'sweetalert2';
 import ReactDOM from 'react-dom';
 
@@ -80,12 +81,13 @@ const db = [
 ]
 
 export default function Home() {
-  //Everything commented with * is a TTS line
-  //*const synth = window.speechSynthesis;
+  
+  const synth = window.speechSynthesis;
   const characters = db;
   const [cardContainer, setCardContainer] = useState<HTMLDivElement | null>(null);
   const cardContainerRef = useRef<HTMLDivElement | null>(null);
-
+  let [ttsStatus, setChecked] = useState();
+  
   useEffect(() => {
     setCardContainer(cardContainerRef.current);
   }, []);
@@ -128,6 +130,17 @@ export default function Home() {
     }
   }
 
+  function tts(text: string){
+    let checkbox = document.getElementById('toggleTts') as HTMLInputElement
+    
+    if(checkbox.checked){
+      let newUtterance = new SpeechSynthesisUtterance(
+        text
+      );
+      synth.speak(newUtterance)
+    }
+  }
+
   function buttonActions(direction: string) {
     swiped(direction, characters[questionIndex].question);
     () => outOfFrame(characters[questionIndex].question);
@@ -135,17 +148,18 @@ export default function Home() {
   }
 
   const swiped = (direction: string, cardKey: string) => {
-    /* *let swipeText = new SpeechSynthesisUtterance(
-      "You answered "+answer,
-    );
-    synth.speak(swipeText);*/
+    
     let newAnswer = direction === 'left' ? 'Non' : 'Oui';
     setAnswer(newAnswer);
     answer = newAnswer
+    tts("Tu as répondu "+answer)
+
     if (answer === characters[questionIndex].response) {
       showAlert(true);
+      tts("Bravo")
     } else {
       showAlert(false);
+      tts("Raté")
     }
     setLastDirection(direction);
 
@@ -156,13 +170,6 @@ export default function Home() {
     setQuestionIndex((prevIndex) => prevIndex - 1);
   };
 
-  /*useEffect(() => {
-    if (answer === characters[questionIndex].response) {
-      showAlert(true);
-    } else {
-      showAlert(false);
-    }
-  }, [answer, characters, questionIndex]);*/
 
   const outOfFrame = (name: string) => {
     console.log(name + answer)
@@ -171,6 +178,11 @@ export default function Home() {
 
 return (
   <div>
+    <div className="TTS" id="tts">
+    <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><path d="M480 32c0-12.9-7.8-24.6-19.8-29.6s-25.7-2.2-34.9 6.9L381.7 53c-48 48-113.1 75-181 75H192 160 64c-35.3 0-64 28.7-64 64v96c0 35.3 28.7 64 64 64l0 128c0 17.7 14.3 32 32 32h64c17.7 0 32-14.3 32-32V352l8.7 0c67.9 0 133 27 181 75l43.6 43.6c9.2 9.2 22.9 11.9 34.9 6.9s19.8-16.6 19.8-29.6V300.4c18.6-8.8 32-32.5 32-60.4s-13.4-51.6-32-60.4V32zm-64 76.7V240 371.3C357.2 317.8 280.5 288 200.7 288H192V192h8.7c79.8 0 156.5-29.8 215.3-83.3z"/></svg>
+      <Checkbox></Checkbox> 
+      
+    </div>
   <link href='https://fonts.googleapis.com/css?family=Damion&display=swap' rel='stylesheet' />
   <link href='https://fonts.googleapis.com/css?family=Alatsi&display=swap' rel='stylesheet' />
   <h1>Eco Bacchus</h1>
