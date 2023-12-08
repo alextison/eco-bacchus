@@ -14,7 +14,10 @@
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18",
-    "react-tinder-card": "^1.6.4"
+    "react-tinder-card": "^1.6.4",
+    "sweetalert": "^2.1.2",
+    "sweetalert2": "^11.10.1",
+    "sweetalert2-react-content": "^5.0.7"
   },
   "devDependencies": {
     "@types/node": "^20",
