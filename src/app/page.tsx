@@ -26,12 +26,27 @@ const db = [
 ]
 
 export default function Home() {
-
+  //Everything commented with * is a TTS line
+  //*const synth = window.speechSynthesis;
   const characters = db
   const [lastDirection, setLastDirection] = useState<string>()
+  let [answer, setAnswer] = useState<string>()
+  
 
   const swiped = (direction: string, nameToDelete: string) => {
-    console.log('removing: ' + nameToDelete)
+    
+    
+    if(direction == "left"){
+      setAnswer("No")
+    }else{
+      setAnswer("Yes")
+    }
+    /* *let swipeText = new SpeechSynthesisUtterance(
+      "You answered "+answer,
+    );
+    synth.speak(swipeText);*/
+
+
     setLastDirection(direction)
   }
 
@@ -46,14 +61,14 @@ return (
   <h1>Eco Bacchus</h1>
   <div className='cardContainer'>
     {characters.map((character) =>
-      <TinderCard className='swipe' key={character.name} onSwipe={(dir) => swiped(dir, character.name)} onCardLeftScreen={() => outOfFrame(character.name)}>
+      <TinderCard className='swipe' preventSwipe={['up', 'down']} key={character.name} onSwipe={(dir) => swiped(dir, character.name)} onCardLeftScreen={() => outOfFrame(character.name)}>
         <div style={{ backgroundImage: 'url(' + character.url + ')' }} className='card'>
           <h3>{character.name}</h3>
         </div>
       </TinderCard>
     )}
   </div>
-  {lastDirection ? <h2 className='infoText'>You swiped {lastDirection}</h2> : <h2 className='infoText' />}
+  {answer ? <h2 className='infoText'>You answered {answer}</h2> : <h2 className='infoText' />}
 </div>
 )
 }
