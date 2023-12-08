@@ -6,25 +6,11 @@ import Button from './components/button/Button';
 
 const db = [
   {
-    name: 'Richard Hendricks',
+    question: 'Will the eath be destroyed by 2050?',
+    leftAnswer: 'No',
+    rightAnswer: 'Yes',
     url: './img/ampoule-dd.jpeg'
   },
-  {
-    name: 'Erlich Bachman',
-    url: './img/ampoule-dd.jpeg'
-  },
-  {
-    name: 'Monica Hall',
-    url: './img/ampoule-dd.jpeg'
-  },
-  {
-    name: 'Jared Dunn',
-    url: './img/ampoule-dd.jpeg'
-  },
-  {
-    name: 'Dinesh Chugtai',
-    url: './img/ampoule-dd.jpeg'
-  }
 ]
 
 export default function Home() {
@@ -65,27 +51,35 @@ export default function Home() {
     console.log(name + ' left the screen!')
   }
 
-  return (
-    <div>
-      <link href='https://fonts.googleapis.com/css?family=Damion&display=swap' rel='stylesheet' />
-      <link href='https://fonts.googleapis.com/css?family=Alatsi&display=swap' rel='stylesheet' />
-      <h1>Eco Bacchus</h1>
-      <div className='cardContainer'>
-        {characters.map((character) =>
-          <TinderCard className='swipe' preventSwipe={['up', 'down']} key={character.name} onSwipe={(dir) => swiped(dir, character.name)} onCardLeftScreen={() => outOfFrame(character.name)}>
-            <div style={{ backgroundImage: 'url(' + character.url + ')' }} className='card'>
-              <h3>{character.name}</h3>
+return (
+  <div>
+  <link href='https://fonts.googleapis.com/css?family=Damion&display=swap' rel='stylesheet' />
+  <link href='https://fonts.googleapis.com/css?family=Alatsi&display=swap' rel='stylesheet' />
+  <h1>Eco Bacchus</h1>
+  <div className='cardContainer'>
+    {characters.map((character) =>
+      <TinderCard className='swipe' key={character.question} onSwipe={(dir) => swiped(dir, character.question)} onCardLeftScreen={() => outOfFrame(character.question)}>
+        <div style={{ backgroundImage: 'url(' + character.url + ')' }} className='card'>
+          <div className='veil'>
+            <div className='answers'>
+              <div className='answer'>
+                <h4>{character.leftAnswer}</h4>
+              </div>
+              <div className='answer'>
+                <h4>{character.rightAnswer}</h4>
+              </div>
             </div>
-            {/* <div className="buttonsRow">
+            <h3>{character.question}</h3>
+          </div>
+          {/* <div className="buttonsRow">
               <Button type="no" onClickFunction={(dir: string) => swiped(dir = "left", character.name)} />
               <Button type="yes" onClickFunction={(dir: string) => swiped(dir = "right", character.name)} />
             </div> */}
-          </TinderCard>
-        )}
-
-
-      </div>
-      {answer ? <h2 className='infoText'>You answered {answer}</h2> : <h2 className='infoText' />}
-    </div>
-  )
+        </div>
+      </TinderCard>
+    )}
+  </div>
+  {lastDirection ? <h2 className='infoText'>You swiped {lastDirection}</h2> : <h2 className='infoText' />}
+</div>
+)
 }
